@@ -1,4 +1,4 @@
-# Annotation Reporting Tool
+# annotation_report.py: Annotation Reporting Tool
 
 This program combines the contents of all video annotation files and dumps
 them to a single CSV file suitable for analyzing with the statistical software
