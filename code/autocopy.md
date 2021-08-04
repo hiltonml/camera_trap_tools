@@ -68,6 +68,13 @@ The key-value pairs in this section are a mapping from digits to camera views, i
 
 ```<digit> = <full name of view>, <single-character abbreviation of view name>```
 
+### [Animal_Detector]
+If you enable animal detection by setting the configuration variable **detect_objects=1**, the configuration variables in this section are used.
+
+* _max_nms_overlap_: maximum fraction of bounding box overlap allowed before non-maxima suppression routine prunes smaller box 
+* _supported_views_: comma separated list of abbreviated names for views the detector should be run on
+
+
 ## OCR Capability
 Many trail cameras include the ability to burn an information banner into the images they capture. This banner typically contains metadata such as image aquisition date and time, camera serial number, and temperature.  This program includes the ability to extract some image metadata from the information banner using optical character recognition (OCR).  The OCR module used by this program is based on the k-Nearest Neighbors algorithm, which is a machine learning technique that must be trained for each specific camera + image resolution combination.  For more information on how to train the OCR, see [this document](https://github.com/hiltonml/camera_trap_tools/edit/main/code/utils/OCR/README.md).
 
