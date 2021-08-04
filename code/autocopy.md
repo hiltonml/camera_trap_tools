@@ -51,7 +51,7 @@ This section contains configuration variables used by more than one program in t
 ### [Autocopy]
 This section contains configuration variables used only by the Autocopy program.
 
-* _camera_id_: Unique four digit number assigned to camera.  The default behavior of this program is to extract the camera ID from the serial number embedded in the information banner by many cameras. If your camera does not create an information banner, or you have not created an OCR module for your camera, you should override the default value by setting the camera_id configuration (or use the --id command line option).
+* _camera_id_: Unique four digit number assigned to camera.  The default behavior of this program is to extract the camera ID from the serial number embedded in the information banner by many cameras. If your camera does not create an information banner, or you have not created an OCR module for your camera, you should override the default value by setting the camera_id configuration (or use the ```--id``` command line option).
 * _camera_model_: name of the camera camera_model
 * _copy_images_: 1 = copy images to destination, 0 = do not copy images
 * _default_image_source_: If you are copying images from a folder instead of an SD card, this is the path to folder containing images to copy
@@ -69,7 +69,7 @@ The key-value pairs in this section are a mapping from digits to camera views, i
 ```<digit> = <full name of view>, <single-character abbreviation of view name>```
 
 ### [Animal_Detector]
-If you enable animal detection by setting the configuration variable **detect_objects=1**, the configuration variables in this section are used.
+If you enable animal detection by setting the configuration variable ```detect_objects=1```, the configuration variables in this section are used.
 
 * _max_nms_overlap_: maximum fraction of bounding box overlap allowed before non-maxima suppression routine prunes smaller box 
 * _supported_views_: comma separated list of abbreviated names for views the detector should be run on
@@ -78,4 +78,4 @@ If you enable animal detection by setting the configuration variable **detect_ob
 ## OCR Capability
 Many trail cameras include the ability to burn an information banner into the images they capture. This banner typically contains metadata such as image aquisition date and time, camera serial number, and temperature.  This program includes the ability to extract some image metadata from the information banner using optical character recognition (OCR).  The OCR module used by this program is based on the k-Nearest Neighbors algorithm, which is a machine learning technique that must be trained for each specific camera + image resolution combination.  For more information on how to train the OCR, see [this document](https://github.com/hiltonml/camera_trap_tools/edit/main/code/utils/OCR/README.md).
 
-If you do not wish to train the OCR for your images, you can tell the program to get the acquisition date/time from EXIF metadata by setting the configuration variable _use_exif_=1 and providing the camera serial number using either the **--id** command line option or by setting the configuration variable _camera_ID_ 
+If you do not wish to train the OCR for your images, you can tell the program to get the acquisition date/time from EXIF metadata by setting the configuration variable ```use_exif=1``` and providing the camera serial number using either the ```--id``` command line option or by setting the configuration variable ```camera_ID```.
