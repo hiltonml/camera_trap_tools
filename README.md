@@ -1,3 +1,5 @@
+# THE DOCUMENTATION IN THIS REPOSITORY IS STILL UNDER DEVELOPMENT
+
 # Camera Trap Time-Lapse Video Tools
 
 This repository contains a suite of tools for managing time-lapse recordings taken by camera traps (a.k.a. trail cameras).  Tools are provided for the following tasks:
