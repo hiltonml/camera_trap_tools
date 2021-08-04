@@ -42,6 +42,8 @@ This section contains configuration variables used by more than one program in t
                           
 * _default_annotation_folder_: path to root of the default folder where annotations are stored
 * _default_image_folder_: path to root of default folder where the downloaded images are stored
+* _detection_box_folder_: path to root of the folder storing bounding boxes of animals detected
+* _detection_log_file_: path to file indicating the number of animals detected in each image file
 * _error_log_file_: path to error logging file
 * _prefix_: string prepended to image filename
 * _time_zone_: your time zone designator
