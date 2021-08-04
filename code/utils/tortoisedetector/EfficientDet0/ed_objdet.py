@@ -13,9 +13,9 @@ import tensorflow as tf
 
 
 class OD_EfficientDet0:
-    def __init__(self, app_config):
+    def __init__(self, od_config):
         # EfficientDet0 settings
-        settings = app_config.app_config["EfficientDet0"]
+        settings = od_config.config["EfficientDet0"]
         self.draw_boxes = bool(int(settings["draw_boxes"]))              # indicates if boxes should be drawn around detected objects
         self.label_map = settings["label_map"]                           # label map file, mapping object labels to integer indices
         self.threshold = float(settings["threshold"])                    # object detection score threshold

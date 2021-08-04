@@ -16,9 +16,9 @@ import pickle
 
 
 class OD_MobileNet:
-    def __init__(self, app_config):
+    def __init__(self, od_config):
         # MobileNet settings
-        settings = app_config.app_config["MobileNet"]
+        settings = od_config.config["MobileNet"]
         self.draw_boxes = bool(int(settings["draw_boxes"]))             # indicates if bounding boxes for objects should be drawn on image
         self.model_path = settings["model_path"]						# path to MobileNet h5 file
         self.label_map = settings["label_map"]							# pickle file containing label map
