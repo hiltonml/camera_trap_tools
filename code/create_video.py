@@ -66,7 +66,7 @@ class AppConfig:
         self.prefix = settings.get("prefix", "")                            # filename prefix string        
         
         # settings specific to this program
-        settings = self.app_config["Compose_Video"]  
+        settings = self.app_config["Create_Video"]  
         self.compose_scale = float(settings.get("compose_scale", 0.25))     # image scaling factor for side-by-side composite video
         self.composite_views = settings.get("composite_views", "")          # two view names to be composited
         self.create_composite = bool(int(settings.get("create_composite", 1)))  # should a composite be created?
