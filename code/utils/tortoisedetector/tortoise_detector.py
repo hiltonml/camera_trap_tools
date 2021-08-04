@@ -47,7 +47,7 @@ class ObjectDetectorConfig:
     """ 
     Configuration settings for this object detector.   
     """
-    def __init__(self, config_filename, app_config):
+    def __init__(self, config_filename):
         """
         Loads settings from the object detector's configuration file.
         Inputs:
