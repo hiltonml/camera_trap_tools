@@ -58,14 +58,14 @@ class AnnotationReport:
                                     output goes to stdout
         """
         if filename is None:
-            print("site,file,behavior,kind,individual,startTime,endTime,user")
+            print("site,file,activity,kind,individual,startTime,endTime,user")
             for site, data in annotationDict.items():
                 for date, annots in data:
                     for annot in annots:
                         print(f"{site},{date},{annot.behavior},{annot.kind},{annot.individual},{annot.startTime},{annot.endTime},{annot.user}")
         else:
             with open(filename, "w") as outFile:
-                outFile.write("site,file,behavior,kind,individual,startTime,endTime,user\n")
+                outFile.write("site,file,activity,kind,individual,startTime,endTime,user\n")
                 for site, data in annotationDict.items():
                     for date, annots in data:
                         for annot in annots:
