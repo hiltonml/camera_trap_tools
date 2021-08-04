@@ -21,7 +21,7 @@ Short Form|Long Form|Type|Description
 -c| --config|    path|      Configuration file.  If not provided, defaults to "capture_report.config" located in the same directory as this program.
 -m| --month| string|   Month for which to create a report, in YYYY-MM format.  If not provided, the report is created for the entire period of time data has been recorded.
 
-The name of the report file generated depends on whether the **--month** argument is provided. If no argument is provided, the file is named 'capture_report.csv'; 
+The name of the report file generated depends on whether the ```--month``` argument is provided. If no argument is provided, the file is named 'capture_report.csv'; 
 if an argument is provided, the file is named 'capture_report_*YYYY-MM*.csv' where *YYYY-MM* is the year and month for the report.
 
 ## Configuration File Settings
