@@ -89,7 +89,7 @@ class AnnotatorApp(TLV_ApplicationWindow):
         self.userName = None                    # username of person running this program      
         self._videoOdBoxes = None               # dictionary mapping frame indices to lists of object detection boxes
         # perform intialization actions
-        self.setAppTitle("Tortoise Annotator")
+        self.setAppTitle("Video Annotator")
         self.setWindowTitle(self.getAppTitle())  
         self._sequenceFolder = self.app_config.sequenceFolder
         self._videoFolder = self.app_config.videoFolder       
@@ -198,23 +198,23 @@ class AnnotatorApp(TLV_ApplicationWindow):
         editorLayout = QtWidgets.QGridLayout(editors)     
 
         # create the counting editor
-        self._countEditor = CountEditor(self, 'Number of Visible Tortoises', self._annotations)
+        self._countEditor = CountEditor(self, 'Number of Focal Animals Visible', self._annotations)
         self.countBehaviors = self._countEditor.getBehaviors()            
         if self.app_config.countOnly:
 
             editorLayout.addWidget(self._countEditor, 0, 0)
 
         else:
-            # load the tortoise activities from the application's config file
-            self.tortoiseBehaviors = self.readConfigActivities('TortoiseActivity')
-            ids = self.readConfigList('TortoiseID')
-            self._tortoiseEditor = AnnotationEditor(self, 'Tortoise', 'tortoise', self.tortoiseBehaviors, ids, self._annotations)
+            # load the focal animal's activities from the application's config file
+            self.tortoiseBehaviors = self.readConfigActivities('FocalActivity')
+            ids = self.readConfigList('FocalID')
+            self._tortoiseEditor = AnnotationEditor(self, 'Focal Animals', 'focal', self.tortoiseBehaviors, ids, self._annotations)
             editorLayout.addWidget(self._tortoiseEditor, 0, 0)
             if self.app_config.showCommensal:
                 # load the commensal activities from the application's config file
                 self.commensalBehaviors = self.readConfigActivities('CommensalActivity')
                 ids = self.readConfigList('CommensalID')
-                self._commensalEditor = AnnotationEditor(self, 'Commensal', 'commensal', self.commensalBehaviors, ids, self._annotations)
+                self._commensalEditor = AnnotationEditor(self, 'Commensal Animals', 'commensal', self.commensalBehaviors, ids, self._annotations)
                 editorLayout.addWidget(self._commensalEditor, 0, 1)    
 
         # create a table view of the annotations
