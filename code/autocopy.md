@@ -1,4 +1,4 @@
-# SD Card Automatic Download, Rename, and Optionally Run Animal Detector
+# autocopy.py: SD Card Automatic Download, Rename, and Optionally Run Animal Detector
 
 This program copies files from a source location (typically SD cards used in a trail camera)
 to a destination directory, renaming the files so they include image metadata in the 
