@@ -44,8 +44,8 @@ This section contains configuration variables used by more than one program in t
 * _error_log_file_: path to error logging file
 * _prefix_: string prepended to image filename
 
-[Create_Video]
-This section contains configuration variables only used by the create_video.py program.
+### [Create_Video]
+This section contains configuration variables only used by the ```create_video.py``` program.
 
 * _compose_scale_: image scaling factor applied to each view in side-by-side composite video
 * _composite_views_: full name of the two views to be composited into a side-by-side video
