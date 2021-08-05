@@ -128,7 +128,7 @@ class AnnotationCreator:
                    
                 # write out the annotation file
                 _, site_ID, _, date, _ = trailcamutils.splitImageFilename(detection_files[0][0], self.app_config.prefix, self.app_config.views)
-                self.writeAnnotationFile(annotations, trailcamutils.createAnnotationFilename(site_ID, date))
+                self.writeAnnotationFile(annotations, trailcamutils.createAnnotationFilename(site_ID, date, self.app_config.prefix))
 
 
     def getConfigFilename(self):
