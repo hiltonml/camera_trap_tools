@@ -3,50 +3,14 @@ Utility functions used by the various trail camera applications.
 Mike Hilton, Eckerd College
 """
 
+# standard Python modules
 from datetime import datetime
 import glob
 import os
 import shutil
 
-
-
-def copyImages(sourceFolder, destFolder, burrowList, dayList):
-    """
-    Copies the raw image files for the specified burrows and days.
-    Input:
-        sourceFolder        string; base folder for raw images
-        destFolder          string; base folder to copy images to
-        burrowList          list of strings; list of burrow IDs for images to copy
-        dayList             list of strings; list of days to copy, in YYYY-MM-DD format
-    """
-    for burrow in burrowList:
-        for day in dayList:
-            source = os.path.join(sourceFolder, burrow, day)
-            if os.path.exists(source):
-                dest = os.path.join(destFolder, burrow)
-                os.makedirs(dest, exist_ok=True)                
-                shutil.copytree(source, os.path.join(dest, day))
-
-
-def copyVideos(sourceFolder, destFolder, burrowList, dayList):
-    """
-    Copies the video files for the specified burrows and days.
-    Input:
-        sourceFolder        string; base folder for source videos
-        destFolder          string; base folder to copy videos to
-        burrowList          list of strings; list of burrow IDs for videos to copy
-        dayList             list of strings; list of days to copy, in YYYY-MM-DD format
-    """
-    for burrow in burrowList:
-        for day in dayList:
-            parts = day.split('-')
-            midPath = os.path.join(burrow, f"{burrow}-{parts[0]}", f"{burrow}-{parts[0]}-{parts[1]}")
-            files = glob.glob(f"{sourceFolder}/{midPath}/{burrow}-{day.replace('-', '')}-*")
-            for f in files:
-                destPath = os.path.join(destFolder, midPath)
-                os.makedirs(destPath, exist_ok=True)  
-                destFile = os.path.join(destPath, os.path.basename(f))
-                shutil.copyfile(f, destFile)
+# 3rd party modules
+from exif import Image  
 
 
 def createAnnotationFilename(site_ID, date):
@@ -96,21 +60,6 @@ def datetimeFromImageFilename(filename, prefix, views):
     return createDatetime(date, time)
 
 
-def dumpAnnotations(annotationFolder, dumpFilename):
-    """
-    Appends all annotation files in the annotationFolder into a single file
-    with the name dumpFilename.
-    """
-    files = getFilenamesInFolder(annotationFolder, ".annotations")
-    with open(dumpFilename, "w") as dumpFile:
-        for filename in files:
-            burrow_id, date = splitAnnotationFilename(filename)
-            with open(os.path.join(annotationFolder, filename), "r") as f:
-                for line in f:
-                    dumpFile.write(f"{burrow_id},{date},{line}")
-
-
-
 def getExifData(filename):
     """
     If the specified image file has exif data, return the date and time the image was
@@ -120,8 +69,7 @@ def getExifData(filename):
     Returns:
         If the image has exif data, this function returns a tuple of the form (date, time);
         otherwise, it returns None
-    """
-    from exif import Image    
+    """  
     with open(filename, 'rb') as image_file:
         exif_image = Image(image_file)   
         if exif_image.has_exif:
@@ -177,6 +125,7 @@ def getSubfolders(parent, leaves=False, includePath=True):
     Inputs:
         parent          string; parent folder
         leaves          boolean; indicates if leaves of the entire subfolder tree should be returned
+        includePath     boolean; indicates if the path leading to the subfolder should be included in returned values
     """
     def helper(p, lyst):
         with os.scandir(p) as entries:
@@ -282,7 +231,7 @@ def splitImageFilename(filename, prefix, views):
     """
     Splits a trail cam image filename into its constituent parts.
     Input:
-        filename        string; filename in the format "<BurrowID><'T' or 'F'>-<YYYYMMDD>-<HHMMSS>.<ext>"
+        filename        string; filename in the format "<prefix><siteID><view abbreviation>-<YYYYMMDD>-<HHMMSS>.<ext>"
         prefix          string; prefix string at front of filename
         views           {char: (string, char)}; dictionary mapping digits to views
     Returns:
@@ -350,34 +299,4 @@ def videoPathFromParts(site_ID, date):
     year = date[0:4]
     year_month = date[0:7]
     return os.path.join(site_ID, f"{site_ID}-{year}", f"{site_ID}-{year_month}")
-
-
-def copy_videos_in_file(filenames, sourceDir, destDir):
-    """
-    Copies videos from one folder to another.
-    Inputs:
-        filenames       string; path to a text file containing prefix names videos to copy, in the format <siteID>-<date>
-        sourceDir       string; root folder of the source folder tree
-        destDir         string; root folder of the destination folder tree
-    """
-    # read in the file prefixes
-    files = set()
-    with open(filenames, "r") as f:
-        for line in f:
-            files.add(line.strip())
-    files = list(files)
-    files.sort()
-
-    # process files
-    for file in files:
-        siteID, _, date = splitVideoFilename(file + "top.mp4", "", {})
-        p = videoPathFromParts(siteID, date)
-        f = os.path.join(sourceDir, p, (file + "*"))
-        for name in glob.glob(f):
-            print(name)
-            fname = os.path.basename(name)
-            destPath = os.path.join(destDir, p)
-            os.makedirs(destPath, exist_ok=True)
-            destName = os.path.join(destPath, fname)
-            shutil.copyfile(name, destName)
         
