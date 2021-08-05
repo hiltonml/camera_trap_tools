@@ -331,7 +331,7 @@ class AnnotatorApp(TLV_ApplicationWindow):
             base, _ = os.path.splitext(os.path.basename(sequence.getFilename()))
             site_ID, _, date = trailcamutils.splitVideoFilename(base, self.app_config.prefix, self.app_config.views)
             return os.path.join(self.app_config.annotationFolder, 
-                                trailcamutils.createAnnotationFilename(site_ID, date))
+                                trailcamutils.createAnnotationFilename(site_ID, date, self.app_config.prefix))
         else:
             def splitall(path):
                 allparts = []
@@ -351,7 +351,7 @@ class AnnotatorApp(TLV_ApplicationWindow):
             folder = os.path.abspath(sequence.getFilename())
             parts = splitall(folder)
             parts.reverse()
-            fname = trailcamutils.createAnnotationFilename(parts[2], parts[1])
+            fname = trailcamutils.createAnnotationFilename(parts[2], parts[1], "")
             return os.path.join(self.app_config.annotationFolder, fname)
 
     def getConfigFilename(self):

@@ -13,11 +13,11 @@ import shutil
 from exif import Image  
 
 
-def createAnnotationFilename(site_ID, date):
+def createAnnotationFilename(site_ID, date, prefix):
     """
     Returns the filename for the specified annotation file.
     """
-    return site_ID + "-" + date + ".annotations"
+    return prefix + site_ID + "-" + date + ".annotations"
 
 
 def createDatetime(date, time):
