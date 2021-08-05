@@ -110,7 +110,7 @@ class AnnotatorApp(TLV_ApplicationWindow):
         bar = self.menuBar()
         # Annotator commands
         menu = bar.addMenu("Annotator") 
-        self.menu_annotatorNextVideo = menu.addAction("Next Video in Sequence")
+        self.menu_annotatorNextVideo = menu.addAction("Next Video in Series")
         self.menu_annotatorNextVideo.triggered.connect(self.nextVideoInSequence)
         self.menu_annotatorNextVideo.setDisabled(True)
         noSave = menu.addAction("Exit Without Saving Annotations")
