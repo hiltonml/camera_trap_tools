@@ -1,9 +1,10 @@
 """
-Gopher Tortoise Detector
+Object Detection-Based Gopher Tortoise Detector
 Mike Hilton, Eckerd College
 2021/07/06
 
-This is an example animal detector for use with the Eckerd Camera Trap Tools.
+This is an example animal detector for use with the autocopy.py program that
+is part of the Eckerd Camera Trap Tools suite.
 
 To use this detector, you must have the TensorFlow Object Detection API installed.
 Google "tensorflow object detection api" to find the latest instructions on how to 

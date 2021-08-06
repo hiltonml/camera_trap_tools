@@ -152,8 +152,12 @@ class AutoCopy:
             self.ocr = TrailCamOCR() 
         if self.app_config.detect_objects:
             ### if you implement your own animal detector, you should replace these lines
-            from utils.tortoisedetector.tortoise_detector import TortoiseDetector
-            self.object_detector = TortoiseDetector(self.app_config)           
+            # the GenericDetector is a classification-based CNN
+            from utils.genericdetector.generic_classification_detector import GenericDetector
+            self.object_detector = GenericDetector(self.app_config)
+            # the TortoiseDetector is an object detection-based CNN
+            # from utils.tortoisedetector.tortoise_detector import TortoiseDetector
+            # self.object_detector = TortoiseDetector(self.app_config)           
 
 
     def close(self):
