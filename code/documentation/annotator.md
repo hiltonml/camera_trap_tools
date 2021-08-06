@@ -20,8 +20,10 @@ The annotator application window has three main sets of controls: the video view
 - The annotation navigation controls consist of the timeline plot and the previous/next event buttons.  The timeline plot displays the activities that have been assigned to specific animals.  The colors of the activities match the colors in the activity buttons found in the annotation editor.  If you click on an activity in the timeline, the video will move to the start frame of the activity.  The previous/next event buttons move the video to the frame associated with the previous/next event.  You can also click on an activity in the Annotations table to navigate to the start of the activity.
 - The annotation editing controls let you add or delete activities from the timeline.  The appearance of the editing controls will change depending on the annotation mode selected in the configuration file.  There are three annotation modes: 
   - _Focal species mode_, where only one set of editing controls is displayed. The figure above shows focal species mode.
-  - _Focal and commensal animals mode_, where two sets of editing controls are displayed.  Each set can contain different events and animal IDs.![Focal and Commensal mode](Focal_Commensal_Mode.png)  
-  - _Counting mode_, which simplify marking video segments to indicate whether they contain a single animal or multiple animals.  You cannot specify which animal(s) are present.  The "Animals Present" buttons act as toggles, sometimes saving you the need to press the ```Begin``` or ```End``` buttons. ![Counting Mode](Count_Mode.png)
+  - _Focal and commensal animals mode_, where two sets of editing controls are displayed.  Each set can contain different events and animal IDs.
+  ![Focal and Commensal mode](Focal_Commensal_Mode.png)  
+  - _Counting mode_, which simplify marking video segments to indicate whether they contain a single animal or multiple animals.  You cannot specify which animal(s) are present.  The "Animals Present" buttons act as toggles, sometimes saving you the need to press the ```Begin``` or ```End``` buttons. 
+  ![Counting Mode](Count_Mode.png)
 
 To add an instantaneous activity to the timeline, navigate to the video frame where the activity occurs.  Press the appropriate activity button, select an item in the ID list, and press the ```Start``` button.  
 
