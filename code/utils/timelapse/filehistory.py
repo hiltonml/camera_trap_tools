@@ -9,7 +9,7 @@ class FileHistoryManager:
 
     def __init__(self, config, size=10):
         self._config = config       # configparser object used to persist the file history
-        self._configSection = 'FileHistory'     # name of section in config file where file history is stored
+        self._configSection = 'File_History'     # name of section in config file where file history is stored
         self._history = []          # concrete implementation of history is a queue implemented using a list
         self._size = size           # maximum number of items to keep in history
 

@@ -52,10 +52,12 @@ class AppConfig:
 
         # settings specific to this application
         settings = self.app_config["Annotator"]
-        self.countOnly = bool(int(settings.get("count_only", 0)))           # Show the animal count editor, instead of activity editor
-        self.showCommensal = bool(int(settings.get("show_commensal", 0)))    # indicates if commensal editor should be shown        
+        self.mode = int(settings.get("mode", 0))                            # annotation mode; 0=count only; 1=focal species; 2=focal and commensal species
         self.showOdBoxes = bool(int(settings.get("show_detection_boxes", 1))) # indicates if object detection boxes should be drawn on images if available
-        self.trainingFolder = settings["training_folder"]       # folder where ML training images are written
+        self.trainingFolder = settings["training_folder"]                   # folder where ML training images are written
+
+        self.countOnly = (self.mode == 0)                                   # Show the animal count editor, instead of activity editor
+        self.showCommensal = (self.mode == 2)                               # indicates if commensal editor should be shown        
 
         # camera viewpoint names
         settings = self.app_config["Camera_Views"]
@@ -206,14 +208,14 @@ class AnnotatorApp(TLV_ApplicationWindow):
 
         else:
             # load the focal animal's activities from the application's config file
-            self.tortoiseBehaviors = self.readConfigActivities('FocalActivity')
-            ids = self.readConfigList('FocalID')
+            self.tortoiseBehaviors = self.readConfigActivities('Focal_Activity')
+            ids = self.readConfigList('Focal_ID')
             self._tortoiseEditor = AnnotationEditor(self, 'Focal Animals', 'focal', self.tortoiseBehaviors, ids, self._annotations)
             editorLayout.addWidget(self._tortoiseEditor, 0, 0)
             if self.app_config.showCommensal:
                 # load the commensal activities from the application's config file
-                self.commensalBehaviors = self.readConfigActivities('CommensalActivity')
-                ids = self.readConfigList('CommensalID')
+                self.commensalBehaviors = self.readConfigActivities('Commensal_Activity')
+                ids = self.readConfigList('Commensal_ID')
                 self._commensalEditor = AnnotationEditor(self, 'Commensal Animals', 'commensal', self.commensalBehaviors, ids, self._annotations)
                 editorLayout.addWidget(self._commensalEditor, 0, 1)    
 
