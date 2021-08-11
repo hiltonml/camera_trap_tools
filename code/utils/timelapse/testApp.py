@@ -4,7 +4,7 @@ Mike Hilton, Eckerd College
 """
 from PySide2 import QtCore, QtGui, QtWidgets
 import sys
-from TlvAppWindow import TLV_ApplicationWindow
+from tlvappwindow import TLV_ApplicationWindow
 
 class TestApp(TLV_ApplicationWindow):
     def __init__(self):

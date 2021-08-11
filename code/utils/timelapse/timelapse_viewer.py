@@ -10,8 +10,6 @@ video and still image sequences one frame at a time.
 import os
 
 # 3rd party modules
-import cv2
-import numpy as np
 from PySide2 import QtCore, QtGui, QtWidgets
 
 # modules that are part of this package
@@ -407,20 +405,3 @@ class TimeLapseViewer(QtWidgets.QWidget):
                 else:
                     size = frame.shape
                 self.image.resize(size[1], size[0])
-
-    
-
-            
-        
-        
-
-
-
-
-
-
-
-
-
-
- 

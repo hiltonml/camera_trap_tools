@@ -1,0 +1,11 @@
+### Python Dependencies for the Eckerd Camera Trap Tools
+
+exif
+numpy
+opencv-contrib-python-headless
+Pillow
+psutil
+PySide2 > 5.0
+scikit-learn
+tensorflow >= 2.0
+

@@ -30,7 +30,6 @@ import os
 
 # 3rd party modules
 import cv2
-import numpy as np
 import tensorflow as tf
 
 # modules that are part of this package
