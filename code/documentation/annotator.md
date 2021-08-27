@@ -54,6 +54,7 @@ This section contains configuration variables used by more than one program in t
 This section contains configuration variables used only by this program.
 
 * _mode_: 0 = count mode; 1 = focal species mode; 2 = focal and commensal animals mode
+* _show_animal_detection_: 1 = show animal detector results in the timeline; 0 = do not show animal detector results unless in count mode.  The animal detector timeline plot has the label "AI_Count" and it is read-only (i.e., it cannot be edited).
 * _show_detection_boxes_: 1 = show animal detection bounding boxes by default; 0 = do not show animal detection bounding boxes by default
 * _training_folder_: path to folder where images are written when the ```Annotator > Save Frame For Training``` command is executed
 
