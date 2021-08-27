@@ -2,6 +2,8 @@
 
 This program lets you annotate videos or image sequences, marking segments of the video where specific activities are taking place.  You can also associate each activity with a specific animal or animals.  The annotations are stored in text files that are separate from video and image files.
 
+The annotator can work with video files or image sequences.  An image sequence is a collection of images located in the same folder.  The images are ordered alphabetically by filename.
+
 ## Command Line Arguments
 All arguments are optional; default values can be provided in a configuration file.
 Short Form|Long Form|Type|Description
