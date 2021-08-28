@@ -34,11 +34,11 @@ class AnnotationTable(QTableWidget):
         self.setSortingEnabled(False)
         self.setRowCount(len(self._annotations))
         i = 0
-        for annotation in self._annotations:
-            if (self._client.app_config.countOnly or 
-                (annotation.getUser() == "Count") or 
-                (annotation.getBehavior() in self._client.tortoiseBehaviors) or
-                (annotation.getBehavior() in self._client.commensalBehaviors)):                
+        for annotation in self._annotations:   
+            if ((self._client.app_config.countOnly and (annotation.getIndividual() == "count")) or 
+                ((not self._client.app_config.countOnly) and (annotation.getIndividual() != "AI_count") and (annotation.getIndividual() != "count")) or
+                (annotation.getBehavior() in self._client.focalBehaviors) or
+                (annotation.getBehavior() in self._client.commensalBehaviors)):               
                 self.insertRow(i)
                 self.setItem(i, 0, QtWidgets.QTableWidgetItem(str(annotation.startFrame)))
                 end = "" if annotation.endFrame is None else str(annotation.endFrame)

@@ -191,9 +191,10 @@ class TimeLineCanvas(QtWidgets.QWidget):
         y = 0
         while ((countOfIndividualsDisplayed == 0) or (y < self.height())) and (i < len(self._parent.IDs)):
             individual = self._parent.IDs[i]
-            if (self._parent.app.app_config.countOnly or 
-                # AI_count and human are special individuals that should not be displayed unless countOnly is True 
-                ((individual != "AI_count") and (individual != "human"))):  
+            if ((self._parent.app.app_config.countOnly and ((individual == "AI_count") or (individual == "count"))) or 
+                (self._parent.app.app_config.showAnimalDetection and (individual == "AI_count")) or
+                # AI_count and human are special individuals that should not be displayed unless countOnly or showAnimalDetection is True 
+                ((not self._parent.app.app_config.countOnly) and (individual != "AI_count"))):  
 
                 # stop drawing if the entire block for this individual cannot be drawn in widget 
                 if (y + self.blockHeights[individual]) > self.height():
@@ -230,9 +231,9 @@ class TimeLineCanvas(QtWidgets.QWidget):
                     for index, annot in enumerate(behaviors[keys[b]]):
                         if index == 0:
                             # create a pen of the right color for this behavior
-                            if annot.kind == 'tortoise':
-                                if annot.behavior in self._parent.app.tortoiseBehaviors:
-                                    color = self._parent.app.tortoiseBehaviors[annot.behavior]['color']
+                            if annot.kind == 'focal':
+                                if annot.behavior in self._parent.app.focalBehaviors:
+                                    color = self._parent.app.focalBehaviors[annot.behavior]['color']
                                 else:
                                     color = "white"
                             elif annot.kind == 'commensal':

@@ -53,7 +53,8 @@ class AppConfig:
         # settings specific to this application
         settings = self.app_config["Annotator"]
         self.mode = int(settings.get("mode", 0))                            # annotation mode; 0=count only; 1=focal species; 2=focal and commensal species
-        self.showOdBoxes = bool(int(settings.get("show_detection_boxes", 1))) # indicates if object detection boxes should be drawn on images if available
+        self.showAnimalDetection = bool(int(settings.get("show_animal_detection", 0))) # indicates if the animal detection count should be shown in timeline
+        self.showOdBoxes = bool(int(settings.get("show_detection_boxes", 1))) # indicates if animal detection boxes should be drawn on images if available
         self.trainingFolder = settings["training_folder"]                   # folder where ML training images are written
 
         self.countOnly = (self.mode == 0)                                   # Show the animal count editor, instead of activity editor
@@ -86,8 +87,8 @@ class AnnotatorApp(TLV_ApplicationWindow):
         self._countEditor = None                # CountEditor object               
         self._dirty = False                     # tracks if contents of _annotations has changed
         self._odBoxes = None                    # list of object detection boxes for current frame                      
-        self._tortoiseEditor = None             # AnnotationEditor object for tortoises
-        self.tortoiseBehaviors = {}             # dictionary mapping tortoise ID to properties dictionary          
+        self._focalEditor = None                # AnnotationEditor object for focal animals
+        self.focalBehaviors = {}                # dictionary mapping focal animal ID to properties dictionary          
         self.userName = None                    # username of person running this program      
         self._videoOdBoxes = None               # dictionary mapping frame indices to lists of object detection boxes
         # perform intialization actions
@@ -139,11 +140,11 @@ class AnnotatorApp(TLV_ApplicationWindow):
         if self.app_config.countOnly:
             self._countEditor.reset()
         else:
-            self._tortoiseEditor.reset()        
+            self._focalEditor.reset()        
             if self._commensalEditor is not None:
                 self._commensalEditor.reset()
         # load the annotations for this sequence
-        filename = self._getAnnotationFilename()
+        filename = os.path.abspath(self._getAnnotationFilename())
         if os.path.exists(filename):
             self._annotations.readFromFile(filename, self.tlviewer.getImageSequence())
         # if this is a video, look for boxes file
@@ -208,10 +209,10 @@ class AnnotatorApp(TLV_ApplicationWindow):
 
         else:
             # load the focal animal's activities from the application's config file
-            self.tortoiseBehaviors = self.readConfigActivities('Focal_Activity')
+            self.focalBehaviors = self.readConfigActivities('Focal_Activity')
             ids = self.readConfigList('Focal_ID')
-            self._tortoiseEditor = AnnotationEditor(self, 'Focal Animals', 'focal', self.tortoiseBehaviors, ids, self._annotations)
-            editorLayout.addWidget(self._tortoiseEditor, 0, 0)
+            self._focalEditor = AnnotationEditor(self, 'Focal Animals', 'focal', self.focalBehaviors, ids, self._annotations)
+            editorLayout.addWidget(self._focalEditor, 0, 0)
             if self.app_config.showCommensal:
                 # load the commensal activities from the application's config file
                 self.commensalBehaviors = self.readConfigActivities('Commensal_Activity')
@@ -285,8 +286,8 @@ class AnnotatorApp(TLV_ApplicationWindow):
         - enables the span editor button if the index falls between an annotation segment
         """
         # enable span editor button, if called for
-        if self._tortoiseEditor is not None:
-            self._tortoiseEditor.spanBtn.setEnabled(
+        if self._focalEditor is not None:
+            self._focalEditor.spanBtn.setEnabled(
                 self._annotations.findSpanningEvent(index+1, "count", None) is not None
                 )
 
@@ -378,26 +379,25 @@ class AnnotatorApp(TLV_ApplicationWindow):
         Sets the current time lapse viewer frame to the start frame of the event, and selects
         the behavior and animal ID buttons to match those specified
         """
+        # clear the editors
+        self._annotTable.clearSelection()
+        if self.app_config.countOnly:
+            self._countEditor.clearSelections()        
+        if self._focalEditor is not None:
+            self._focalEditor.clearSelections() 
+        if self._commensalEditor is not None:
+            self._commensalEditor.clearSelections()
         # set the editing controls
         self.getTimeLapseViewer().gotoFrame(frame)
-        if kind == "tortoise" and self._tortoiseEditor is not None:
-            self._tortoiseEditor.clearSelections()            
-            self._tortoiseEditor.selectID(individual)
-            self._tortoiseEditor.selectBehavior(behavior)
-        elif kind == "commensal" and self.app_config.showCommensal:
-            self._commensalEditor.clearSelections()            
+        if kind == "count" and self.app_config.countOnly:
+            self._countEditor.selectID("count")
+        elif kind == "focal" and self._focalEditor is not None:           
+            self._focalEditor.selectID(individual)
+            self._focalEditor.selectBehavior(behavior)
+        elif kind == "commensal" and self.app_config.showCommensal:           
             self._commensalEditor.selectID(individual)
             self._commensalEditor.selectBehavior(behavior) 
-        elif kind == "count" and self._countEditor is not None:
-            if self.app_config.countOnly:
-                self._countEditor.clearSelections()
-            else:
-                # clear the other editors
-                self._annotTable.clearSelection()
-                if self._tortoiseEditor is not None:
-                    self._tortoiseEditor.clearSelections() 
-                if self._commensalEditor is not None:
-                    self._commensalEditor.clearSelections()
+
 
 
 

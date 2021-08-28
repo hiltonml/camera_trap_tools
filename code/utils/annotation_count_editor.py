@@ -98,7 +98,7 @@ class CountEditor(AnnotationEditor):
 
         def _createIDList(layout, row):
             idList = QtWidgets.QListWidget()
-            idList.setSelectionMode(QtWidgets.QListWidget.MultiSelection)
+            idList.setSelectionMode(QtWidgets.QListWidget.SingleSelection)
             idList.setProperty('ids', row)
             layout.addWidget(idList)
             return idList
@@ -180,6 +180,11 @@ class CountEditor(AnnotationEditor):
             
     def selectedIDs(self):
         """
-        Returns a list of pairs (item, text) for the animal IDs currently selected.
+        Returns a list of pairs (item, text) for the animal IDs currently selected. 
         """
-        return [(self.idList.item(0), self.idList.item(0).text())]    
+        selection = self.idList.selectedItems()
+        # Since the list widget is SingleSelection, selection should have at most one element
+        if len(selection) > 0:
+            return [(selection[0], selection[0].text())]   
+        else:
+            return [] 

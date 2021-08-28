@@ -366,33 +366,4 @@ class AnnotationEditor(QtWidgets.QGroupBox):
                         event.getStartTime(), event.getEndTime(), self._client.userName
                         ))   
             self.moveIDsToTopOfList(ids)
-
-
-if __name__ == "__main__":
-    import sys
-
-
-    class Annotation_TestWindow(QtWidgets.QMainWindow):
-        def __init__(self):
-            super().__init__()
-            self._main = QtWidgets.QWidget()                # the central widget for this app
-            self.setWindowTitle("Annotation Tester")          
-            self.setCentralWidget(self._main)
-            self.annotations = AnnotationList()
-
-            # create the main body of the app
-            self.mainLayout = QtWidgets.QVBoxLayout(self._main)
-
-            activities = { 
-                "Basking":["blue","paired"], 
-                "Walkabout":["green","paired"], 
-                "Enter":["red","single"],
-                "Exit":["orange", "single"]}
-            ids = ['tort1', 'tort2', 'tort3']     
-            self.annotator = AnnotationEditor(self, 'Tortoise', 'tortoise', activities, ids, self.annotations) 
-            self.mainLayout.addWidget(self.annotator)   
-
-    qapp = QtWidgets.QApplication(sys.argv)
-    app = Annotation_TestWindow()
-    app.show()
-    qapp.exec_()          
+       
