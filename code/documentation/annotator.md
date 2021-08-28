@@ -2,6 +2,8 @@
 
 This program lets you annotate videos or image sequences, marking segments of the video where specific activities are taking place.  You can also associate each activity with a specific animal or animals.  The annotations are stored in text files that are separate from video and image files.
 
+The annotator can work with video files or image sequences.  An image sequence is a collection of images located in the same folder.  The images are ordered alphabetically by filename.
+
 ## Command Line Arguments
 All arguments are optional; default values can be provided in a configuration file.
 Short Form|Long Form|Type|Description
@@ -52,6 +54,7 @@ This section contains configuration variables used by more than one program in t
 This section contains configuration variables used only by this program.
 
 * _mode_: 0 = count mode; 1 = focal species mode; 2 = focal and commensal animals mode
+* _show_animal_detection_: 1 = show animal detector results in the timeline; 0 = do not show animal detector results unless in count mode.  The animal detector timeline plot has the label "AI_Count" and it is read-only (i.e., it cannot be edited).
 * _show_detection_boxes_: 1 = show animal detection bounding boxes by default; 0 = do not show animal detection bounding boxes by default
 * _training_folder_: path to folder where images are written when the ```Annotator > Save Frame For Training``` command is executed
 
