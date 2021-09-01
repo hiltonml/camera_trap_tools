@@ -1,6 +1,6 @@
 # Camera Trap Tools 
 
-This folder contains the source code for the camera trap tools.  The ```documentation``` folder contains information about each of the tools.
+This folder contains the source code for the camera trap tools.  The [documentation folder](https://github.com/hiltonml/camera_trap_tools/blob/main/code/documentation) contains information about each of the tools.
 
 To install the Python dependencies for this project, use the command  ```pip install -r requirements.txt```.
 
