@@ -46,8 +46,6 @@ class ClassifierConfig:
         self.model_file = os.path.join(os.path.dirname(__file__), settings["model_h5_file"])
         # pickle file containing the label encoder
         self.label_encoder = os.path.join(os.path.dirname(__file__), settings["label_encoder"])
-        # label for the animal not present class
-        self.not_present_label = settings["not_present_label"]
         # label for the animal present class
         self.present_label = settings["present_label"]
         # confidence threshold
