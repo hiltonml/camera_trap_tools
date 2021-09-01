@@ -13,7 +13,7 @@ programs.)
 Two example animal detector implementations are provided:
 - The ```utils/genericdetector``` folder contains an image classifier-based
 algorithm that indicates if one or more animals of the species of interest is present in an image, but does
-not indicate where the animals are in the image.  A Goole Colab [notebook](https://github.com/hiltonml/camera_trap_tools/blob/main/code/utils/genericdetector/Generic_Animal_Detector.ipynb) is provided showing one way to train
+not indicate where the animals are in the image.  A Google Colab [notebook](https://github.com/hiltonml/camera_trap_tools/blob/main/code/utils/genericdetector/Generic_Animal_Detector.ipynb) is provided showing one way to train
 an image classifier for use with the generic detector.
 - The ```utils/tortoisedetector``` folder contains an object detection-based algorithm that indicates if one or more gopher tortoises
 are present in an image and provides bounding box coordinates indicating the location of each tortoise.  These bounding boxes are displayed by the ```annotator.py``` program.
