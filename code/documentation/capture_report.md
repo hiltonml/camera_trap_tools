@@ -16,6 +16,7 @@ Each record (line) of the report represents one camera day and contains the foll
 
 ## Command Line Arguments
 All arguments are optional; default values can be provided in a configuration file.
+
 Short Form|Long Form|Type|Description
 ----------|---------|----|-----------
 -c| --config|    path|      Configuration file.  If not provided, defaults to "capture_report.config" located in the same directory as this program.
