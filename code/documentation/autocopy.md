@@ -27,6 +27,7 @@ where ```<Date>``` will have the format YYYY-MM-DD, which is the year, month, an
 
 ## Command Line Arguments
 All arguments are optional; default values can be provided in a configuration file.
+
 Short Form|Long Form|Type|Description
 ----------|---------|----|-----------
 -c| --config|    path|      Configuration file.  If not provided, defaults to "autocopy.config" located in the same directory as this program.
@@ -79,3 +80,6 @@ If you enable animal detection by setting the ```[Autocopy]``` configuration var
 Many trail cameras include the ability to burn an information banner into the images they capture. This banner typically contains metadata such as image aquisition date and time, camera serial number, and temperature.  This program includes the ability to extract some image metadata from the information banner using optical character recognition (OCR).  The OCR module used by this program is based on the k-Nearest Neighbors algorithm, which is a machine learning technique that must be trained for each specific camera + image resolution combination.  For more information on how to train the OCR, see [this document](https://github.com/hiltonml/camera_trap_tools/blob/main/code/utils/ocr/README.md).
 
 If you do not wish to train the OCR for your images, you can tell the program to get the acquisition date/time from EXIF metadata by setting the configuration variable ```use_exif=1``` and providing the camera serial number using either the ```--id``` command line option or by setting the configuration variable ```camera_ID```.
+
+## Animal Detector
+More information about creating an animal detector can be found [here](https://github.com/hiltonml/camera_trap_tools/blob/main/code/documentation/animal_detector.md).
