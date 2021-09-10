@@ -13,7 +13,8 @@ created for each day, except in the following situations:
 - Videos are not created for the final day of images for a camera.  The reason for this is the 
     assumption that more images taken on the "current" final day will be downloaded
     the next time the camera SD card is swapped.  We want to include those new images
-    in the day's video, so creation of video is delayed until a future date.
+    in the day's video, so creation of video is delayed until a future date.  If you want a 
+    video created for the final day, use the ```--force``` option.
     
 The video files will be organized in the video directory with the following structure:
     ```<VideoDirectory>/<prefix><CameraID>/<prefix><CameraID>-<YYYY>/<prefix><CameraID>-<YYYY>-<MM>``` 
