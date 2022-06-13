@@ -10,4 +10,11 @@ This repository contains a suite of tools for managing time-lapse recordings tak
 
 The distinguishing feature of this suite is that it can handle large amounts of data with a minimum of human interaction.  We use this software to manage 24 camera traps that are generating a total of 250,000 images (~380 GB of data) per day.
 
-A short paper describing the tool set and some results can be found [here](https://arxiv.org/abs/2206.05159)
+A short paper describing the tool set and some results can be found [here.](https://arxiv.org/abs/2206.05159)
+
+# Installing the Tools
+
+1. The tools use Python 3, which must be installed on your computer.  You can find Python installers [here.](http://python.org)
+2. If you are a git user, clone this repository.  If you are not familiar with git, press the green "Code" button on this page and select "Download ZIP".  After the download completes, unzip the file to the location where you want the tools installed.
+3. Open a command window and change the working directory to the tool's ```code``` folder. Run the command  ```pip install -r requirements.txt```
+4. Test if the installation was successful by running the command ```python3 autocopy.py -c ../example_data/example.config```  After running this command, there should be a file named ```autocopy_errors.log``` in the ```example_data``` folder, containing a message indicating four images have been successfully copied.
