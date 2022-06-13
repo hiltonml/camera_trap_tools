@@ -8,4 +8,4 @@ psutil
 PySide2 > 5.0
 scikit-learn
 tensorflow >= 2.0
-
+pytz
