@@ -9,3 +9,5 @@ This repository contains a suite of tools for managing time-lapse recordings tak
 - Generating reports on status of camera capture and processing.  [Learn more.](https://github.com/hiltonml/camera_trap_tools/blob/main/code/documentation/capture_report.md)
 
 The distinguishing feature of this suite is that it can handle large amounts of data with a minimum of human interaction.  We use this software to manage 24 camera traps that are generating a total of 250,000 images (~380 GB of data) per day.
+
+A short paper describing the tool set and some results can be found [here](https://arxiv.org/abs/2206.05159)
