@@ -17,5 +17,5 @@ A short paper describing the tool set and some results can be found [here.](http
 1. The tools use Python 3, which must be installed on your computer.  You can find Python installers [here.](http://python.org)
 2. If you are a git user, clone this repository.  If you are not familiar with git, press the green "Code" button on this page and select "Download ZIP".  After the download completes, unzip the file to the location where you want the tools installed.
 3. Open a command window and change the working directory to the tool's ```code``` folder. Run the command  ```pip install -r requirements.txt```
-4. If you want to create MPEG videos from your still images, you will need to install ```ffmpeg```.  You can find installers [here.](https://www.ffmpeg.org/)
+4. If you want to create MPEG videos from your still images, you will need to install ```ffmpeg```.  You can find installers [here.](https://www.ffmpeg.org/)  Be sure to add the ffmpeg ```bin``` folder to your computer's PATH variable.
 5. Test if the installation was successful by running the command ```python3 autocopy.py -c ../example_data/example.config```  After running this command, there should be a file named ```autocopy_errors.log``` in the ```example_data``` folder, containing a message indicating four images have been successfully copied.
