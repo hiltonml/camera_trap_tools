@@ -35,6 +35,7 @@ import datetime
 import functools
 import operator
 import os
+import sys
 
 # 3rd party modules
 import numpy as np
@@ -49,32 +50,33 @@ class AppConfig:
     """ 
     Configuration settings for this application.
     """
+
     def __init__(self, configFilename):
         """
         Loads settings from the app configuration file.
         """
-        self.app_config = configparser.ConfigParser()         
+        self.app_config = configparser.ConfigParser()
         assert os.path.exists(configFilename), f"Confguration file not found: {configFilename}"
         self.app_config.read(configFilename)
 
         # general settings shared by multiple trail_camera_tools programs
-        settings = self.app_config["General_Settings"]  
-        self.box_folder = settings["detection_box_folder"]                  # folder where single image file object detection box files are located        
-        self.images_folder = settings["default_image_folder"]               # root of raw image folder 
+        settings = self.app_config["General_Settings"]
+        self.box_folder = settings["detection_box_folder"]                  # folder where single image file object detection box files are located
+        self.images_folder = settings["default_image_folder"]               # root of raw image folder
         self.error_log_file = settings.get("error_log_file", "error.log")   # path to error log
         self.video_folder = settings["default_video_folder"]                # destination folder for videos
-        self.prefix = settings.get("prefix", "")                            # filename prefix string        
-        
+        self.prefix = settings.get("prefix", "")                            # filename prefix string
+
         # settings specific to this program
-        settings = self.app_config["Create_Video"]  
+        settings = self.app_config["Create_Video"]
         self.compose_scale = float(settings.get("compose_scale", 0.25))     # image scaling factor for side-by-side composite video
         self.composite_views = settings.get("composite_views", "")          # two view names to be composited
         self.create_composite = bool(int(settings.get("create_composite", 1)))  # should a composite be created?
         self.force = bool(int(settings.get("force", 0)))                    # force the creation of video files, even if one of the same name already exists
         self.image_extension = settings.get("image_extension", "JPG")       # file extension of source images
-        self.max_interval = float(settings.get("max_interval", 3))          # maximum time interval (in seconds) allowed when time-aligning composite image frames 
-        self.recompress = bool(int(settings.get("recompress_composite", 1))) # recompress the videos using FFMPEG for maximum compression
- 
+        self.max_interval = float(settings.get("max_interval", 3))          # maximum time interval (in seconds) allowed when time-aligning composite image frames
+        self.recompress = bool(int(settings.get("recompress_composite", 1)))  # recompress the videos using FFMPEG for maximum compression
+
         # camera viewpoint names
         settings = self.app_config["Camera_Views"]
         self.views = {}
@@ -94,12 +96,11 @@ class AppConfig:
                 raise Exception("The composite_views configuration value must contain two comma-separated view names")
             view_names = map(lambda x: x[0], self.views.values())
             if not functools.reduce(
-                operator.and_, 
+                operator.and_,
                 map(lambda x: x in view_names, self.composite_views)
-                ):
+            ):
                 raise Exception("One or more composite_views configuration values is not a legal view name")
 
-              
 
 class ComposeVideo:
     COMPRESSOR = "mp4v"
@@ -108,7 +109,6 @@ class ComposeVideo:
         if configFile is None:
             configFile = self.getConfigFilename()
         self.app_config = AppConfig(configFile)
-
 
     def concatImages(self, image1, image2, scale):
         """
@@ -127,7 +127,6 @@ class ComposeVideo:
         opencvImage = cv2.cvtColor(np.array(cat), cv2.COLOR_RGB2BGR)
         return opencvImage
 
-
     def createVideo(self, day, sourceFolder, destinationFolder, imageExtension, siteID):
         """
         Creates a video sequence from time-lapses images.
@@ -138,9 +137,9 @@ class ComposeVideo:
             imageExtension          string; extension of image files to include in video
             day                     string; the date (folder name) of the source images
             siteID                  string; the ID of site (parent folder name) for the source images 
-        """   
+        """
         # create folder paths
-        viewAbbrevs = { x[0]:x[1] for (key, x) in self.app_config.views.items() }
+        viewAbbrevs = {x[0]: x[1] for (key, x) in self.app_config.views.items()}
         view1_ImageDir = os.path.join(sourceFolder, trailcamutils.imagePathFromParts(siteID, viewAbbrevs[self.app_config.composite_views[0]], day, self.app_config.views))
         view2_ImageDir = os.path.join(sourceFolder, trailcamutils.imagePathFromParts(siteID, viewAbbrevs[self.app_config.composite_views[1]], day, self.app_config.views))
         dateFolder = os.path.split(view1_ImageDir)[0]
@@ -155,7 +154,7 @@ class ComposeVideo:
             else:
                 # The cv2 video writer does not do a very good job compressing the video, so it is first
                 # created to a temporary file, which will later be compressed by ffmpeg
-                tempFile = os.path.join(destinationFolder, "temporary.mp4")                 
+                tempFile = os.path.join(destinationFolder, "temporary.mp4")
             if self.app_config.force or (not os.path.exists(outputFilename)):
                 print("Creating " + outputFilename)
                 self.imagesPlusImagesCompose(
@@ -164,8 +163,8 @@ class ComposeVideo:
                     tempFile,
                     imageExtension,
                     indexFilename
-                    )
-                print()     
+                )
+                print()
                 # compress the video using ffmpeg
                 if self.app_config.recompress and os.path.exists(tempFile):
                     os.system(f'ffmpeg -y -i "{tempFile}" -b:v 30M "{outputFilename}"')
@@ -177,9 +176,9 @@ class ComposeVideo:
             viewDir = os.path.join(dateFolder, viewName)
             if os.path.exists(viewDir):
                 outputFilename = os.path.join(destinationFolder, trailcamutils.videoFilenameFromParts(siteID, day, viewName.lower(), "mp4"))
-                indexFilename = os.path.join(destinationFolder, trailcamutils.videoFilenameFromParts(siteID, day, viewName.lower(), "index"))   
+                indexFilename = os.path.join(destinationFolder, trailcamutils.videoFilenameFromParts(siteID, day, viewName.lower(), "index"))
                 boxFilename = os.path.join(destinationFolder, trailcamutils.videoFilenameFromParts(siteID, day, viewName.lower(), "vboxes"))
-                imagesBoxFolder = os.path.join(self.app_config.box_folder, siteID, day, viewName)         
+                imagesBoxFolder = os.path.join(self.app_config.box_folder, siteID, day, viewName)
                 if self.app_config.force or (not os.path.exists(outputFilename)):
                     print("Creating " + outputFilename)
                     self.singleViewVideo(
@@ -189,10 +188,8 @@ class ComposeVideo:
                         outputFilename,
                         indexFilename,
                         boxFilename
-                        )
-                    print()                
-
-
+                    )
+                    print()
 
     def createVideoWriter(self, filename, fourccType, width, height):
         """
@@ -201,7 +198,6 @@ class ComposeVideo:
         fourcc = cv2.VideoWriter_fourcc(*fourccType)
         writer = cv2.VideoWriter(filename, fourcc, 30, (width, height), True)
         return writer
-    
 
     def getConfigFilename(self):
         """
@@ -209,7 +205,6 @@ class ComposeVideo:
         """
         base, _ = os.path.splitext(__file__)
         return base + ".config"
-
 
     def imagesPlusImagesCompose(self, view1_ImageDir, view2_ImageDir, videoOut, imageExtension, indexFilename):
         """
@@ -230,20 +225,20 @@ class ComposeVideo:
             return
         elif len(view1Files) == 0:
             print("[ERROR] No image files found in " + view1_ImageDir)
-            return       
+            return
         else:
             # load the first image in the view2 image list to find its dimensions
             img = Image.open(view2Files[0][1])
             IMAGE_SIZE = (img.width, img.height)
             # load the first image in the view1 image list to find its dimensions
             img = Image.open(view1Files[0][1])
-            VIDEO_SIZE = (img.width, img.height)       
+            VIDEO_SIZE = (img.width, img.height)
 
         # initialize the video output stream
         scaledImageWidth = int(((VIDEO_SIZE[1] / IMAGE_SIZE[1]) * IMAGE_SIZE[0]) * self.app_config.compose_scale)
         writer = self.createVideoWriter(videoOut, self.COMPRESSOR,
-                                    int(VIDEO_SIZE[0] * self.app_config.compose_scale) + scaledImageWidth + 10, 
-                                    int(VIDEO_SIZE[1] * self.app_config.compose_scale))  
+                                        int(VIDEO_SIZE[0] * self.app_config.compose_scale) + scaledImageWidth + 10,
+                                        int(VIDEO_SIZE[1] * self.app_config.compose_scale))
 
         # create a black image to use on occassion
         blackImage = Image.new("RGB", IMAGE_SIZE)
@@ -255,30 +250,30 @@ class ComposeVideo:
             # loop over all the images
             view1Image = blackImage
             view2Image = blackImage
-            frameCounter = 0    # counter for eye candy 
+            frameCounter = 0    # counter for eye candy
             while (len(view2Files) > 0) or (len(view1Files) > 0):
                 if len(view2Files) == 0:
                     view2Image = blackImage
-                    f = view1Files.pop(0)  
-                    frameTime = trailcamutils.datetimeFromImageFilename(f[1], self.app_config.prefix, self.app_config.views)         
+                    f = view1Files.pop(0)
+                    frameTime = trailcamutils.datetimeFromImageFilename(f[1], self.app_config.prefix, self.app_config.views)
                     try:
                         view1Image = Image.open(f[1])
                     except Exception as e:
-                        print(e)                
+                        print(e)
                         continue
                 elif len(view1Files) == 0:
                     view1Image = blackImage
-                    f = view2Files.pop(0)  
-                    frameTime = trailcamutils.datetimeFromImageFilename(f[1], self.app_config.prefix, self.app_config.views)              
+                    f = view2Files.pop(0)
+                    frameTime = trailcamutils.datetimeFromImageFilename(f[1], self.app_config.prefix, self.app_config.views)
                     try:
                         view2Image = Image.open(f[1])
                     except Exception as e:
-                        print(e)                
-                        continue               
+                        print(e)
+                        continue
                 elif view1Files[0][0] < view2Files[0][0]:
                     # time of topFile is earlier
-                    f = view1Files.pop(0)  
-                    frameTime = trailcamutils.datetimeFromImageFilename(f[1], self.app_config.prefix, self.app_config.views)             
+                    f = view1Files.pop(0)
+                    frameTime = trailcamutils.datetimeFromImageFilename(f[1], self.app_config.prefix, self.app_config.views)
                     try:
                         view1Image = Image.open(f[1])
                     except Exception as e:
@@ -294,8 +289,8 @@ class ComposeVideo:
 
                 else:
                     # time of frontalFile is earlier
-                    f = view2Files.pop(0)   
-                    frameTime = trailcamutils.datetimeFromImageFilename(f[1], self.app_config.prefix, self.app_config.views)             
+                    f = view2Files.pop(0)
+                    frameTime = trailcamutils.datetimeFromImageFilename(f[1], self.app_config.prefix, self.app_config.views)
                     try:
                         view2Image = Image.open(f[1])
                     except Exception as e:
@@ -325,11 +320,10 @@ class ComposeVideo:
                 if (frameCounter % 36) == 0:
                     print(".", end="", flush=True)
                 if (frameCounter % 720) == 0:
-                    print()                    
+                    print()
 
         # release the video file pointer
         writer.release()
-
 
     def main(self, sourceFolder, destinationFolder, imageExtension="jpg", force=False, composite=True):
         """
@@ -340,23 +334,22 @@ class ComposeVideo:
             imageExtension      string; the file extension of still images in sourceFolder
             force               boolean; indicates if video should always be created, even if one of the same name already exists
             composite           boolean; indicates if the composite (side-by-side) video should be created
-        """   
+        """
         self.app_config.force = force
-        self.app_config.create_composite = composite 
+        self.app_config.create_composite = composite
         if sourceFolder == self.app_config.images_folder:
             # process every site in the default folder
             dirs = os.listdir(sourceFolder)
             dirs.sort()
             for d in dirs:
                 siteFolder = os.path.join(sourceFolder, d)
-                if os.path.isdir(siteFolder):     
-                    self.processSite(sourceFolder, destinationFolder, d, imageExtension)  
+                if os.path.isdir(siteFolder):
+                    self.processSite(sourceFolder, destinationFolder, d, imageExtension)
         else:
             # this must be a date folder
             p, date = os.path.split(os.path.abspath(sourceFolder))
             p, siteID = os.path.split(p)
             self.processDay(p, destinationFolder, siteID, date, imageExtension)
-     
 
     def processSite(self, sourceFolder, destinationFolder, siteID, imageExtension):
         """
@@ -368,12 +361,12 @@ class ComposeVideo:
             destinationFolder   string; path for composited video output files
             imageExtension      string; the file extension of still images in sourceFolder
         """
-        sitePath = os.path.join(sourceFolder, siteID)  
+        sitePath = os.path.join(sourceFolder, siteID)
         dirs = os.listdir(sitePath)
         dirs.sort()
 
         if self.app_config.force:
-            limit = len(dirs) 
+            limit = len(dirs)
         else:
             limit = len(dirs) - 1
 
@@ -383,15 +376,13 @@ class ComposeVideo:
             if os.path.isdir(dayFolder):
                 self.processDay(sourceFolder, destinationFolder, siteID, day, imageExtension)
 
-
     def processDay(self, sourceFolder, destinationFolder, siteID, day, imageExtension):
         """
         Create videos for the specified site and date.
         """
         videoPath = os.path.join(destinationFolder, trailcamutils.videoPathFromParts(siteID, day))
         os.makedirs(videoPath, exist_ok=True)
-        self.createVideo(day, sourceFolder, videoPath, imageExtension, siteID)    
-
+        self.createVideo(day, sourceFolder, videoPath, imageExtension, siteID)
 
     def readFileTimes(self, sourceDir, fileType):
         """
@@ -411,7 +402,6 @@ class ComposeVideo:
                 print("Bad datetime: ", f)
         return answer
 
-
     def singleViewVideo(self, imageDir, boxDir, imageExtension, videoFilename, indexFilename, boxFilename):
         """
         Create a video from a directory of still images.
@@ -430,7 +420,7 @@ class ComposeVideo:
             print("[ERROR] No image files found in " + imageDir)
             return
         else:
-            print("Processing " + imageDir)           
+            print("Processing " + imageDir)
 
         # get the time-sorted list of box files
         if (boxDir is not None) and os.path.exists(boxDir):
@@ -462,16 +452,29 @@ class ComposeVideo:
                     boxIdx += 1
 
                 frame += 1
-            
+
             if boxFile is not None:
                 boxFile.close()
 
-        # get the actual file extension 
+        # get the actual file extension
         _, ext = os.path.splitext(os.path.basename(imageFiles[0][1]))
 
-        # compress the files using FFMPEG       
-        pattern = os.path.join(imageDir, f"*{ext}")
-        os.system(f'ffmpeg -y -pattern_type glob -framerate 30 -i "{pattern}" -b:v 30M "{videoFilename}"')     
+        # compress the files using FFMPEG
+        if sys.platform == "win32":
+            # the Windows version of ffmpeg does not support file globbing, so build a file containing
+            # the globbed names to pass to ffmpeg
+            import glob
+            filenames = glob.glob(os.path.join(imageDir, f"*{ext}"))
+            filenames.sort()
+            with open("ffmpeg_input.txt", "w") as outfile:
+                for filename in filenames:
+                    fname = os.path.abspath(filename).replace('\\', '/')
+                    outfile.write(f"file '{fname}'\n")
+            os.system(f'ffmpeg -y -safe 0 -f concat -i ffmpeg_input.txt -framerate 30 -b:v 30M "{videoFilename}"')
+            os.remove("ffmpeg_input.txt")
+        else:
+            pattern = os.path.join(imageDir, f"*{ext}")
+            os.system(f'ffmpeg -y -pattern_type glob -framerate 30 -i "{pattern}" -b:v 30M "{videoFilename}"')
 
 
 def parseCommandLine():
@@ -495,14 +498,14 @@ if __name__ == "__main__":
     if args["dest"] is not None:
         app.app_config.video_folder = args["dest"]
     if args["force"]:
-        app.app_config.force = True 
+        app.app_config.force = True
     if args["source"] is not None:
         app.app_config.images_folder = args["source"]
 
     app.main(
-        app.app_config.images_folder, 
+        app.app_config.images_folder,
         app.app_config.video_folder,
-        app.app_config.image_extension, 
+        app.app_config.image_extension,
         app.app_config.force,
         app.app_config.create_composite
-        )
+    )
