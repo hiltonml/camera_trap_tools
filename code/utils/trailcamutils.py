@@ -5,9 +5,7 @@ Mike Hilton, Eckerd College
 
 # standard Python modules
 from datetime import datetime
-import glob
 import os
-import shutil
 
 # 3rd party modules
 from exif import Image  
