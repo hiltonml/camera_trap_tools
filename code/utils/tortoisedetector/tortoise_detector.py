@@ -52,7 +52,6 @@ class ObjectDetectorConfig:
         Loads settings from the object detector's configuration file.
         Inputs:
             config_filename     string; path to configuration file
-            app_config          parent application's configuration object
         """
         self.config = configparser.ConfigParser()         
         assert os.path.exists(config_filename), f"Confguration file not found: {config_filename}"
@@ -97,7 +96,18 @@ class TortoiseDetector(TrailCamObjectDetector):
         img = cv2.imread(image_file) 
         if img is None:
             raise Exception("Tortoise detector unable to read image file: " + image_file)
-            
+        return self._object_detection_from_image(img)
+
+
+    def _object_detection_from_image(self, img):
+        """
+        Run the object detection algorithm on the supplied numpy array.
+        Inputs:
+            img      numpy array
+        Returns:
+            N x 4 numpy array of format (y_lower, x_lower, y_upper, x_upper), bounding boxes around
+            the detected objects        
+        """
         # the first detection pass uses the EfficientDet0 CNN as a region proposal generator
         _, boxes1, _ = self.od1.run_inference_on_image(img, False)
         if boxes1.shape[0] == 0:

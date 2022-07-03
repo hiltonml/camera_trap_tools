@@ -94,8 +94,26 @@ class GenericDetector(TrailCamObjectDetector):
         # load the image file
         image = keras.preprocessing.image.load_img(image_file, target_size=INPUT_DIMS)
         image = keras.preprocessing.image.img_to_array(image)
-        image = keras.applications.xception.preprocess_input(image)            
-        data = np.array([image], dtype="float32")
+        return self._object_detection_from_image(image)
+
+
+    def _object_detection_from_image(self, image):
+        """
+        Run the animal detection algorithm on the supplied numpy array.
+        Inputs:
+            image       numpy array
+        Returns:
+            N x 4 numpy array of format (y_lower, x_lower, y_upper, x_upper), bounding boxes around
+            the detected objects         
+        """
+        # resize image if necessary
+        if image.shape[0] != INPUT_DIMS[0] or image.shape[1] != INPUT_DIMS[1]:
+            img = tf.image.resize(image, INPUT_DIMS)
+        else:
+            img = image
+
+        img = keras.applications.xception.preprocess_input(img)            
+        data = np.array([img], dtype="float32")
 
         # run the model
         scores = self.model.predict(data)
@@ -110,12 +128,12 @@ class GenericDetector(TrailCamObjectDetector):
 
         if len(idxs[0]) > 0:
             # focal species was present
-            answer = [[0, 0, INPUT_DIMS[0], INPUT_DIMS[1]]]
+            answer = [[0, 0, image.shape[0], image.shape[1]]]
         else:
             # focal species not found
             answer = []
 
-        return answer
+        return answer        
 
 
     def _postprocessBoxes(self, boxes):

@@ -77,7 +77,7 @@ class TrailCamObjectDetector:
     def detect(self, image_file, abbrev_view=None):
         """
         Run the animal detection algorithm on the specified image.
-        Input:
+        Inputs:
             image_file          string; path to image file
             abbrev_view         string; Abbreviated name of camera view associated with this image.
                                     If None, detection is always run on image; otherwise, abbrev_view
@@ -102,6 +102,18 @@ class TrailCamObjectDetector:
                     os.path.splitext(image_file)[0] + ".boxes"
                 )
                 self._write_boxes(box_file, boxes2, (0, 255, 0))
+
+
+    def detectFromImage(self, image):
+        """
+        Run the animal detection algorithm on a numpy array containing the image.
+        Input:
+            image           numpy array
+        Returns:
+            A list of tuples, each of which is a list of the form (y_lower, x_lower, y_upper, x_upper) 
+        """
+        boxes = self._object_detection_from_image(image) 
+        return self._postprocessBoxes(boxes)   
 
 
     def _non_max_suppression(self, boxes, threshold):
@@ -173,6 +185,21 @@ class TrailCamObjectDetector:
         of bounding boxes indicating the extent of each object detected.
         Inputs:
             image_file      string; path to image
+        Returns:
+            N x 4 numpy array of format (y_lower, x_lower, y_upper, x_upper), bounding boxes around
+            the detected objects  
+        """
+        return np.asarray([(10, 10, 50, 75)])
+
+    
+    def _object_detection_from_image(self, image):
+        """
+        ******* YOU WILL NEED TO IMPLEMENT THIS METHOD IN YOUR SUBCLASS.
+
+        Object detection driver.  The result is an N x 4 numpy array of
+        of bounding boxes indicating the extent of each object detected.
+        Inputs:
+            image           numpy array
         Returns:
             N x 4 numpy array of format (y_lower, x_lower, y_upper, x_upper), bounding boxes around
             the detected objects  
