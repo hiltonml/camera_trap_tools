@@ -20,6 +20,13 @@ def createAnnotationFilename(site_ID, date, prefix):
     return prefix + site_ID + "-" + date + ".annotations"
 
 
+def createAutoIdFilename(site_ID, date, prefix):
+    """
+    Returns the filename for the specified AutoID file.
+    """
+    return prefix + site_ID + "-" + date + ".json"
+
+
 def createDatetime(date, time):
     """
     Returns a datetime specifier built from the date and time.
@@ -45,12 +52,48 @@ def createImageFilename(prefix, camera_ID, date, time, extension, views=None):
     return prefix + camera + "-" + createDatetime(date, time) + ext   
 
 
+def createIndexFilename(prefix, camera_ID, view, date):
+    """
+    Returns a trail cam time index filename built from the supplied parts.
+    """
+    date = date.replace("-", "")
+    return f"{prefix}{camera_ID}-{date}-{view}.index"
+
+
 def createVideoFilename(site_ID, view, date, extension="mp4"):
     """
     Returns a video filename built from the supplied parts.
     """
     return videoFilenameFromParts(site_ID, date, view, extension)
         
+
+def dateParts(tc_date, as_ints=False):
+    """
+    Extracts the parts of a trail camera date.  The date can be in either
+    YYYY-MM-DD format or YYYYMMDD format.
+    Inputs:
+        tc_date     string; trail camera date
+        as_ints     boolean; True indicates parts should be returned as integers
+                        False indicates parts should be returned as strings
+    Returns:
+        A tuple of the form (year, month, day)
+    """
+    if "-" in tc_date:
+        # YYYY-MM-DD format
+        year = tc_date[0:4]
+        month = tc_date[5:7]
+        day = tc_date[8:10]
+    else:
+        # YYYYMMDD format
+        year = tc_date[0:4]
+        month = tc_date[4:6]
+        day = tc_date[6:8]
+
+    if as_ints:
+        return int(year), int(month), int(day)
+    else:
+        return year, month, day
+
 
 def datetimeFromImageFilename(filename, prefix, views):
     """
@@ -181,12 +224,24 @@ def parseDateTime(tc_date, tc_time):
     """
     Returns a Python datetime object from a trail camera file date and time.
     """
-    year = int(tc_date[0:4])
-    month = int(tc_date[5:7])
-    day = int(tc_date[8:10])
-    hour = int(tc_time[0:2])
-    minute = int(tc_time[3:5])
-    second = int(tc_time[6:8])
+    if "-" in tc_date:
+        year = int(tc_date[0:4])
+        month = int(tc_date[5:7])
+        day = int(tc_date[8:10])       
+    else:
+        year = int(tc_date[0:4])
+        month = int(tc_date[4:6])
+        day = int(tc_date[6:8])
+
+    if "-" in tc_time:
+        hour = int(tc_time[0:2])
+        minute = int(tc_time[3:5])
+        second = int(tc_time[6:8])
+    else:
+        hour = int(tc_time[0:2])
+        minute = int(tc_time[2:4])
+        second = int(tc_time[4:6])
+
     return datetime(year, month, day, hour, minute, second)
 
 
