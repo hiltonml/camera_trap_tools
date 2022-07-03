@@ -225,19 +225,23 @@ def parseDateTime(tc_date, tc_time):
     Returns a Python datetime object from a trail camera file date and time.
     """
     if "-" in tc_date:
+        # YYYY-MM-DD format
         year = int(tc_date[0:4])
         month = int(tc_date[5:7])
         day = int(tc_date[8:10])       
     else:
+        # YYYYMMDD format
         year = int(tc_date[0:4])
         month = int(tc_date[4:6])
         day = int(tc_date[6:8])
 
     if "-" in tc_time:
+        # HH-MM-SS format
         hour = int(tc_time[0:2])
         minute = int(tc_time[3:5])
         second = int(tc_time[6:8])
     else:
+        # HHMMSS format
         hour = int(tc_time[0:2])
         minute = int(tc_time[2:4])
         second = int(tc_time[4:6])
