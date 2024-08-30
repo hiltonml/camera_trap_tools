@@ -10,6 +10,11 @@ import os
 # 3rd party modules
 from exif import Image  
 
+def convertPythonDatetimeToTrailcamDatetime(pythonDatetime):
+    return pythonDatetime.strftime("%Y%m%d-%H%M%S")
+
+def convertTrailcamDatetimeToPythonDatetime(trailcamDatetime):
+    return datetime.strptime(trailcamDatetime, "%Y%m%d-%H%M%S")
 
 def createAnnotationFilename(site_ID, date, prefix):
     """
@@ -173,7 +178,7 @@ def getSubfolders(parent, leaves=False, includePath=True):
             for entry in entries:
                 if entry.is_dir():  
                     if includePath:                    
-                        lyst.append(entry.path) 
+                        lyst.append(os.path.abspath(entry.path)) 
                     else:
                         lyst.append(entry.name)
                     if leaves:
