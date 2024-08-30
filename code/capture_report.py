@@ -126,7 +126,7 @@ class CaptureReport:
         files = trailcamutils.getFilePathsInSubfolders(rawImageFolder)     
         for f in files:
             _, cameraID, view, date, _  = trailcamutils.splitImageFilename(f, self.app_config.prefix, self.app_config.views)            
-            camera = cameraID + view
+            camera = self.app_config.prefix + cameraID + view
 
             # get the date dictionary associated with this camera
             if camera in cameraDict:
@@ -157,7 +157,7 @@ class CaptureReport:
                 if (month is not None) and (not date.startswith(month)):
                     continue
 
-                camera = siteID + viewAbbrev
+                camera = self.app_config.prefix + siteID + viewAbbrev
 
                 # add video to cameraDict
                 if camera in cameraDict:
@@ -213,8 +213,8 @@ class CaptureReport:
                                 videoExists = True
                         # check if an annotation file exists for this date
                         annotExists = False
-                        if camera[0:4] in annotationDict:
-                            if date in annotationDict[camera[0:4]]:
+                        if camera[:-1] in annotationDict:
+                            if date in annotationDict[camera[:-1]]:
                                 annotExists = True
                         # get image count for this date
                         imageCnt = 0
