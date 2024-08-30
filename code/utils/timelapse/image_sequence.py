@@ -14,8 +14,8 @@ OpenCV is used for reading image and video files.
 import cv2
 from datetime import datetime
 import os
-from PySide2 import QtGui
 
+from PySide2 import QtGui
 
 
 class ImageSequence:
@@ -113,7 +113,6 @@ class ImageSequence:
             self.readFrame(i)
             writer.write(self.frame(i))
         writer.release()
-
 
 
 
@@ -239,3 +238,14 @@ class StillSequence(ImageSequence):
                 #img = QtGui.QImage(filename)
             return img
 
+    def saveAsVideo(self, filename, startFrame, stopFrame):
+        """Saves the image sequence as a video file"""
+        # build a temporary file containing the image filenames to pass to ffmpeg
+        with open("ffmpeg_input.txt", "w") as outfile:
+            for i in range(startFrame, stopFrame):
+                fname = os.path.abspath(self._fileNames[i]).replace('\\', '/')
+                outfile.write(f"file '{fname}'\n")
+
+        # compress the files using FFMPEG
+        os.system(f'ffmpeg -loglevel error -y -safe 0 -f concat -i ffmpeg_input.txt -framerate 30 -b:v 30M "{filename}"')
+        os.remove("ffmpeg_input.txt")
