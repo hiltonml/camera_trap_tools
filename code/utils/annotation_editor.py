@@ -212,7 +212,7 @@ class AnnotationEditor(QtWidgets.QGroupBox):
         self.idList = _createIDList(idLayout, 1)       
         for id in self._ids:
             self.idList.addItem(id) 
-        self.idList.setStyleSheet("max-width: 5em;")                      
+        self.idList.setStyleSheet("max-width: 9em;")                      
 
         # editing buttons
         btnFrame = QtWidgets.QWidget(self)
