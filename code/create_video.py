@@ -91,7 +91,7 @@ class AppConfig:
         # split the composite view names
         self.composite_views = [x.strip() for x in self.composite_views.split(",")]
         # make sure these views are legal
-        if len(self.composite_views) != 0:
+        if self.create_composite and len(self.composite_views) != 0:
             if len(self.composite_views) != 2:
                 raise Exception("The composite_views configuration value must contain two comma-separated view names")
             view_names = map(lambda x: x[0], self.views.values())
@@ -140,9 +140,13 @@ class ComposeVideo:
         """
         # create folder paths
         viewAbbrevs = {x[0]: x[1] for (key, x) in self.app_config.views.items()}
-        view1_ImageDir = os.path.join(sourceFolder, trailcamutils.imagePathFromParts(siteID, viewAbbrevs[self.app_config.composite_views[0]], day, self.app_config.views))
-        view2_ImageDir = os.path.join(sourceFolder, trailcamutils.imagePathFromParts(siteID, viewAbbrevs[self.app_config.composite_views[1]], day, self.app_config.views))
-        dateFolder = os.path.split(view1_ImageDir)[0]
+        if self.app_config.create_composite:
+            view1_ImageDir = os.path.join(sourceFolder, trailcamutils.imagePathFromParts(siteID, viewAbbrevs[self.app_config.composite_views[0]], day, self.app_config.views))
+            view2_ImageDir = os.path.join(sourceFolder, trailcamutils.imagePathFromParts(siteID, viewAbbrevs[self.app_config.composite_views[1]], day, self.app_config.views))
+            dateFolder = os.path.split(view1_ImageDir)[0]
+        else:
+            view_ImageDir = os.path.join(sourceFolder, trailcamutils.imagePathFromParts(siteID, viewAbbrevs[self.app_config.composite_views[0]], day, self.app_config.views))
+            dateFolder = os.path.split(view_ImageDir)[0]           
 
         # if both view1 and view2 images exist, make a composite video
         if self.app_config.create_composite and os.path.exists(view1_ImageDir) and os.path.exists(view2_ImageDir):
@@ -167,7 +171,7 @@ class ComposeVideo:
                 print()
                 # compress the video using ffmpeg
                 if self.app_config.recompress and os.path.exists(tempFile):
-                    os.system(f'ffmpeg -y -i "{tempFile}" -b:v 30M "{outputFilename}"')
+                    os.system(f'ffmpeg -loglevel error -y -i "{tempFile}" -b:v 30M "{outputFilename}"')
                     os.remove(tempFile)
 
         # make a video for each view
@@ -470,7 +474,7 @@ class ComposeVideo:
                 for filename in filenames:
                     fname = os.path.abspath(filename).replace('\\', '/')
                     outfile.write(f"file '{fname}'\n")
-            os.system(f'ffmpeg -y -safe 0 -f concat -i ffmpeg_input.txt -framerate 30 -b:v 30M "{videoFilename}"')
+            os.system(f'ffmpeg -loglevel error -y -safe 0 -f concat -i ffmpeg_input.txt -framerate 30 -b:v 30M "{videoFilename}"')
             os.remove("ffmpeg_input.txt")
         else:
             pattern = os.path.join(imageDir, f"*{ext}")
