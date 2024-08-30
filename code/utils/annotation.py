@@ -101,6 +101,8 @@ class Annotation(object):
             return False
         else:
             return (
+                (self.startTime == other.startTime) and
+                (self.endTime == other.endTime) and
                 (self.startFrame == other.startFrame) and
                 (self.endFrame == other.endFrame) and
                 (self.behavior == other.behavior) and
