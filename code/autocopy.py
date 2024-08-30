@@ -283,8 +283,11 @@ class AutoCopy:
         drives = psutil.disk_partitions()
         for drive in drives:
             volID = os.path.basename(drive.mountpoint)
-            usage = psutil.disk_usage(drive.mountpoint)
-            volSizeGB = usage.total / 1e9
+            try:
+                usage = psutil.disk_usage(drive.mountpoint)
+                volSizeGB = usage.total / 1e9
+            except:
+                volSizeGB = 0
             # check for any volume having a size within 5% of an SD card size
             for cardSize in self.app_config.sd_card_sizes:                    
                 if (cardSize * 0.95 <= volSizeGB <= cardSize * 1.05):

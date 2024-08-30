@@ -415,7 +415,7 @@ class AnnotatorApp(TLV_ApplicationWindow):
         If there are no events after the current frame, do nothing.
         """
         current = self.getTimeLapseViewer().getCurrentFrame()
-        eventFrames = self._annotations.eventFrames(not self.app_config.countOnly)
+        eventFrames = self._annotations.eventFrames(not (self.app_config.countOnly or self.app_config.showAnimalDetection))
         # goto the first event frame after current frame
         event = None
         for event in eventFrames:
@@ -458,7 +458,7 @@ class AnnotatorApp(TLV_ApplicationWindow):
             view = os.path.split(seq)[1]
             site, date = os.path.split(folder)
             folders = trailcamutils.getSubfolders(site)
-            idx = folders.index(folder) + 1
+            idx = folders.index(os.path.abspath(folder)) + 1
             if idx < len(folders):
                 dateFolder = os.path.join(site, folders[idx])
                 views = trailcamutils.getSubfolders(dateFolder, includePath=False)
